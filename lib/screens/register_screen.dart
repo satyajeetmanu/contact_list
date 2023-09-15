@@ -27,13 +27,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
         );
         // Registration successful, navigate back to the login screen.
         Navigator.pop(context);
-      } catch (error) {
+      } on FirebaseAuthException catch (error) {
+        String errormessage = '';
+        if (error.code == 'invalid-email') {
+          errormessage = 'Please enter a valid email';
+        } else if (error.code == 'weak-password') {
+          errormessage = 'Password is too weak';
+        } else if (error.code == 'email-already-in-use') {
+          errormessage = 'This email is already registered';
+        }
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Registration Error'),
-              content: Text(error.toString()),
+              content: Text(errormessage),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {

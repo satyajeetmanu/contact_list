@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Login Error'),
-              content: Text(error.toString()),
+              content: Text('Invalid login credentials'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
