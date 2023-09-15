@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "5689238908",
+    "project_id": "contactlistsg",
+    "storage_bucket": "contactlistsg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:5689238908:android:be20e8b6a1380017bd70f9",
+        "android_client_info": {
+          "package_name": "com.example.contactlist"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACBAdzTpOf5q8Q48oAJS3BsX6dqh_80Fs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
