@@ -60,29 +60,37 @@ class _ContactListScreenState extends State<ContactListScreen> {
               return ListTile(
                 title: Text(contact['name']),
                 subtitle: Text(contact['contactnumber']),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () {
-                    // Navigate to the edit contact screen with the contact data.
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditContactScreen(contact: contact),
-                      ),
-                    );
-                  },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        // Navigate to the edit contact screen with the contact data.
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditContactScreen(contact: contact),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        // Show a confirmation dialog before deleting the contact.
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return DeleteContactDialog(
+                                contactId: contact.id, context: context);
+                          },
+                        );
+                      },
+                    ),
+                  ],
                 ),
-                onLongPress: () {
-                  // Show a confirmation dialog before deleting the contact.
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return DeleteContactDialog(
-                          contactId: contact.id, context: context);
-                    },
-                  );
-                },
               );
             },
           );
@@ -130,8 +138,6 @@ class _EditContactScreenState extends State<EditContactScreen> {
       'name': _nameController.text,
       'contactnumber': _contactnumberController.text,
     });
-
-    Navigator.pop(context); // Go back to the contact list screen
   }
 
   @override
@@ -155,7 +161,10 @@ class _EditContactScreenState extends State<EditContactScreen> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _updateContact,
+              onPressed: () {
+                _updateContact();
+                Navigator.pop(context);
+              },
               child: const Text('Update Contact'),
             ),
           ],
@@ -187,8 +196,6 @@ class _NewContactScreenState extends State<NewContactScreen> {
     };
 
     await FirebaseFirestore.instance.collection('contacts').add(newContact);
-
-    Navigator.pop(context); // Go back to the contact list screen
   }
 
   @override
@@ -212,7 +219,10 @@ class _NewContactScreenState extends State<NewContactScreen> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _addContact,
+              onPressed: () {
+                _addContact();
+                Navigator.pop(context);
+              },
               child: const Text('Add Contact'),
             ),
           ],
@@ -232,8 +242,7 @@ class DeleteContactDialog extends StatelessWidget {
     await FirebaseFirestore.instance
         .collection('contacts')
         .doc(contactId)
-        .delete();
-    Navigator.pop(context); // Close the dialog
+        .delete(); // Close the dialog
   }
 
   @override
@@ -250,7 +259,8 @@ class DeleteContactDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            _deleteContact(context); // Pass the context here
+            _deleteContact(context);
+            Navigator.pop(context); // Pass the context here
           },
           child: const Text('Delete'),
         ),
